@@ -5,9 +5,9 @@ FROM Customers;
 
 -- 2. List all orders with their order dates and corresponding customer names.
 
-SELECT o.OrderID, o.OrderDate, CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName
-FROM Orders o
-JOIN Customers c ON o.CustomerID = c.CustomerID;
+SELECT Orders.OrderID, Orders.OrderDate,Customers.FirstName,Customers.LastName
+FROM Orders 
+JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
 
 
 --  3. Insert a new customer record into the "Customers" table.
@@ -28,15 +28,13 @@ Select * from Products;
 
 --  5. Delete a specific order and its associated order details.
 
-DECLARE @OrderID INT = 1; 
 
 DELETE FROM OrderDetails 
-WHERE OrderID = @OrderID;
+WHERE OrderID = 4;
 
 DELETE FROM Orders 
-WHERE OrderID = @OrderID;
+WHERE OrderID =4;
 
-Select * from Orders;
 
 -- 6. Insert a new order into the "Orders" table.
 
@@ -49,44 +47,26 @@ Select * from Orders;
 
 -- 7. Update the contact information of a specific customer.
 
-DECLARE @CustomerID INT = 1; 
-DECLARE @NewEmail VARCHAR(100) = 'new.email@example.com';
-DECLARE @NewAddress VARCHAR(255) = 'New Address, City, State';
-
 UPDATE Customers
-SET Email = @NewEmail, Address = @NewAddress
-WHERE CustomerID = @CustomerID;
-
-SELECT * from Customers;
+SET Email = 'rathi12l@email.com', Address = '123 west street,dial'
+WHERE CustomerID = 1;
 
 
 -- 8. Recalculate and update the total cost of each order.
 
 UPDATE Orders
 SET TotalAmount = (
-    SELECT SUM(p.Price * od.Quantity)
-    FROM OrderDetails od
-    JOIN Products p ON od.ProductID = p.ProductID
-    WHERE od.OrderID = Orders.OrderID
+    SELECT SUM(Product.Price * OrderDetails.Quantity)
+    FROM OrderDetails 
+    JOIN Products  ON OrderDetails.ProductID = Products.ProductID
+    WHERE OrderDetails.OrderID = Orders.OrderID
 );
-
-SELECT * from Orders;
-
 
 -- 9. Delete all orders and their associated order details for a specific customer.
 
+DELETE FROM OrderDetails WHERE OrderID IN (SELECT OrderID FROM Orders WHERE CustomerID = 8);
 
-
-DECLARE @CustomersID INT; 
-SET @CustomerID = 1; 
-DELETE FROM OrderDetails 
-WHERE OrderID IN (SELECT OrderID FROM Orders WHERE CustomerID = @CustomerID);
-
-DELETE FROM Orders 
-WHERE CustomerID = @CustomerID;
-
-Select * from customers;
-
+DELETE FROM Orders WHERE CustomerID = 8;
 --  10. Insert a new electronic gadget product into the "Products" table.
 
 INSERT INTO Products (ProductName, Description, Price)
@@ -99,15 +79,13 @@ ALTER TABLE Orders
 ADD Status VARCHAR(50);
 
 
-DECLARE @SpecificOrderID INT = 2; 
-DECLARE @UpdatedStatus VARCHAR(50) = 'Shipped';
+UPDATE Orders
+SET OrderStatus = 'Shipped'
+WHERE OrderID = 5;
 
 UPDATE Orders
-SET Status = @UpdatedStatus
-WHERE OrderID = @SpecificOrderID; 
-
-SELECT * FROM Orders;
-
+SET OrderStatus = 'Pending'
+WHERE OrderStatus IS NULL;
 
 
 
