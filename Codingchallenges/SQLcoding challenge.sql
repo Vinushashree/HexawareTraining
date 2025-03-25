@@ -130,7 +130,6 @@ SELECT AVG(dailyRate) AS avgDailyRate FROM Vehicle WHERE status = 'available';
 --  car with the highest daily rate.
 SELECT * FROM Vehicle WHERE dailyRate = (SELECT MAX(dailyRate) FROM Vehicle);
 
-
 -- all cars leased by a specific customer.
 SELECT v.* FROM Vehicle v
 JOIN Lease l ON v.vehicleID = l.vehicleID
@@ -163,8 +162,6 @@ JOIN Lease L ON C.customerID = L.customerID
 JOIN Payment P ON L.leaseID = P.leaseID
 GROUP BY C.customerID, C.firstName, C.lastName;
 
-
-
 -- Car Details for Each Lease.
 SELECT l.*, v.make, v.model, v.year FROM Lease l
 JOIN Vehicle v ON l.vehicleID = v.vehicleID;
@@ -183,9 +180,6 @@ JOIN Lease L ON C.customerID = L.customerID
 JOIN Payment P ON L.leaseID = P.leaseID
 GROUP BY C.customerID, C.firstName, C.lastName
 ORDER BY totalSpent DESC;
-
-
-
 
  --All Cars with Their Current Lease Information.
 SELECT v.*, l.leaseID, l.customerID, l.startDate, l.endDate
